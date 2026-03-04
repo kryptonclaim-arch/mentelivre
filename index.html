@@ -1,0 +1,77 @@
+<div style="max-width:600px;margin:auto;font-family:Arial;padding:20px;">
+    <h1 style="text-align:center;color:#4A6FA5;">🧠 Mente Livre</h1>
+    <p style="text-align:center;">Um espaço seguro para você se expressar anonimamente.</p>
+
+    <h3>1️⃣ Como estou me sentindo hoje?</h3>
+    <select id="emocao" style="width:100%;padding:10px;margin-bottom:15px;">
+        <option value="🙂 Feliz">🙂 Feliz</option>
+        <option value="😔 Triste">😔 Triste</option>
+        <option value="😰 Ansioso">😰 Ansioso</option>
+        <option value="😡 Irritado">😡 Irritado</option>
+        <option value="😴 Cansado">😴 Cansado</option>
+    </select>
+
+    <h3>2️⃣ Preciso conversar?</h3>
+    <select id="conversar" style="width:100%;padding:10px;margin-bottom:15px;">
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+        <option value="Talvez">Talvez</option>
+    </select>
+
+    <h3>💬 Quer desabafar?</h3>
+    <textarea id="mensagem" placeholder="Escreva aqui..." style="width:100%;height:100px;padding:10px;"></textarea>
+
+    <button onclick="publicar()" style="width:100%;padding:12px;background:#4A6FA5;color:white;border:none;margin-top:15px;cursor:pointer;">
+        Publicar Anonimamente
+    </button>
+
+    <hr style="margin:30px 0;">
+
+    <h2>📢 Mural Anônimo</h2>
+    <div id="feed"></div>
+</div>
+
+<script>
+function publicar(){
+    let emocao = document.getElementById("emocao").value;
+    let conversar = document.getElementById("conversar").value;
+    let mensagem = document.getElementById("mensagem").value;
+
+    if(mensagem.trim() === ""){
+        alert("Por favor, escreva uma mensagem.");
+        return;
+    }
+
+    let post = {
+        emocao: emocao,
+        conversar: conversar,
+        mensagem: mensagem,
+        data: new Date().toLocaleString()
+    };
+
+    let posts = JSON.parse(localStorage.getItem("menteLivrePosts")) || [];
+    posts.unshift(post);
+    localStorage.setItem("menteLivrePosts", JSON.stringify(posts));
+
+    document.getElementById("mensagem").value = "";
+    carregarPosts();
+}
+
+function carregarPosts(){
+    let feed = document.getElementById("feed");
+    let posts = JSON.parse(localStorage.getItem("menteLivrePosts")) || [];
+
+    feed.innerHTML = "";
+    posts.forEach(post => {
+        feed.innerHTML += `
+            <div style="background:#f4f6fb;padding:15px;margin-bottom:15px;border-radius:10px;">
+                <strong>${post.emocao}</strong> | Precisa conversar: ${post.conversar}
+                <p>${post.mensagem}</p>
+                <small>${post.data}</small>
+            </div>
+        `;
+    });
+}
+
+carregarPosts();
+</script>
