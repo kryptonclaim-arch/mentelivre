@@ -54,6 +54,11 @@ button{
     border:none;
     border-radius:12px;
     cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#3a5f94;
 }
 
 .post{
@@ -61,6 +66,38 @@ button{
     padding:15px;
     margin-bottom:15px;
     border-radius:15px;
+}
+
+/* --------- DEVS --------- */
+
+.devs{
+    text-align:center;
+    margin:40px 0 20px 0;
+}
+
+.dev-box{
+    display:inline-block;
+    padding:15px 25px;
+    border-radius:15px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    color:white;
+    box-shadow:0 8px 20px rgba(0,0,0,0.2);
+    font-size:14px;
+}
+
+.dev-box h3{
+    margin:5px 0;
+    font-size:16px;
+}
+
+.dev-box p{
+    margin:3px 0;
+}
+
+.tl{
+    font-weight:bold;
+    color:#ffe082;
 }
 </style>
 </head>
@@ -100,6 +137,15 @@ button{
 
 </div>
 
+<!-- DEVS -->
+<footer class="devs">
+    <div class="dev-box">
+        <h3>💻 Dev</h3>
+        <p>Cauã • Kayko • Yam • Victor</p>
+        <p class="tl">TL: Daniele</p>
+    </div>
+</footer>
+
 <!-- Voltar para index se atualizar -->
 <script>
 window.addEventListener("pageshow", function (event) {
@@ -118,13 +164,12 @@ import { getFirestore, collection, addDoc, getDocs }
 from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB-OANZW93b36nOmfqKr8b1I-u-4eGhQIw",
-  authDomain: "mente-livre-site-f5f9f.firebaseapp.com",
-  projectId: "mente-livre-site-f5f9f",
-  storageBucket: "mente-livre-site-f5f9f.firebasestorage.app",
-  messagingSenderId: "227936699846",
-  appId: "1:227936699846:web:9cc2b251ffacb7c2e21ec7",
-  measurementId: "G-1S44TSKE2B"
+  apiKey: "SUA_API_KEY",
+  authDomain: "SEU_AUTH_DOMAIN",
+  projectId: "SEU_PROJECT_ID",
+  storageBucket: "SEU_STORAGE_BUCKET",
+  messagingSenderId: "SEU_MESSAGING_ID",
+  appId: "SEU_APP_ID"
 };
 
 const app = initializeApp(firebaseConfig);
