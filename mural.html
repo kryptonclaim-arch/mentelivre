@@ -1,43 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mural - Mente Livre</title>
+
+<style>
+body{
+    margin:0;
+    font-family:'Segoe UI', sans-serif;
+    background: linear-gradient(-45deg,#4A6FA5,#6B8DD6,#8E54E9,#4776E6);
+    background-size:400% 400%;
+    animation: gradientBG 12s ease infinite;
+}
+
+@keyframes gradientBG{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+.container{
+    max-width:600px;
+    margin:40px auto;
+    background:white;
+    padding:25px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+
+h1{
+    text-align:center;
+    color:#4A6FA5;
+}
+
+select, textarea{
+    width:100%;
+    padding:12px;
+    margin-bottom:15px;
+    border-radius:10px;
+    border:1px solid #ddd;
+}
+
+textarea{
+    height:100px;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    background:#4A6FA5;
+    color:white;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+}
+
+.post{
+    background:#f4f6fb;
+    padding:15px;
+    margin-bottom:15px;
+    border-radius:15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🧠 Mente Livre</h1>
+<p style="text-align:center;">Um espaço seguro para você se expressar anonimamente.</p>
+
+<h3>1️⃣ Como estou me sentindo hoje?</h3>
+<select id="emocao">
+    <option value="🙂 Feliz">🙂 Feliz</option>
+    <option value="😔 Triste">😔 Triste</option>
+    <option value="😰 Ansioso">😰 Ansioso</option>
+    <option value="😡 Irritado">😡 Irritado</option>
+    <option value="😴 Cansado">😴 Cansado</option>
+</select>
+
+<h3>2️⃣ Preciso conversar?</h3>
+<select id="conversar">
+    <option value="Sim">Sim</option>
+    <option value="Não">Não</option>
+    <option value="Talvez">Talvez</option>
+</select>
+
+<h3>💬 Quer desabafar?</h3>
+<textarea id="mensagem" placeholder="Escreva aqui..."></textarea>
+
+<button onclick="publicar()">Publicar Anonimamente</button>
+
+<hr style="margin:30px 0;">
+
+<h2>📢 Mural Anônimo</h2>
+<div id="feed"></div>
+
+</div>
+
+<!-- Voltar para index se atualizar -->
 <script>
 window.addEventListener("pageshow", function (event) {
-    if (event.persisted || performance.getEntriesByType("navigation")[0].type === "reload") {
+    const nav = performance.getEntriesByType("navigation")[0];
+    if (nav && nav.type === "reload") {
         window.location.href = "index.html";
     }
 });
 </script>
-<div style="max-width:600px;margin:auto;font-family:Arial;padding:20px;">
-    <h1 style="text-align:center;color:#4A6FA5;">🧠 Mente Livre</h1>
-    <p style="text-align:center;">Um espaço seguro para você se expressar anonimamente.</p>
 
-    <h3>1️⃣ Como estou me sentindo hoje?</h3>
-    <select id="emocao" style="width:100%;padding:10px;margin-bottom:15px;">
-        <option value="🙂 Feliz">🙂 Feliz</option>
-        <option value="😔 Triste">😔 Triste</option>
-        <option value="😰 Ansioso">😰 Ansioso</option>
-        <option value="😡 Irritado">😡 Irritado</option>
-        <option value="😴 Cansado">😴 Cansado</option>
-    </select>
-
-    <h3>2️⃣ Preciso conversar?</h3>
-    <select id="conversar" style="width:100%;padding:10px;margin-bottom:15px;">
-        <option value="Sim">Sim</option>
-        <option value="Não">Não</option>
-        <option value="Talvez">Talvez</option>
-    </select>
-
-    <h3>💬 Quer desabafar?</h3>
-    <textarea id="mensagem" placeholder="Escreva aqui..." style="width:100%;height:100px;padding:10px;"></textarea>
-
-    <button onclick="publicar()" style="width:100%;padding:12px;background:#4A6FA5;color:white;border:none;margin-top:15px;cursor:pointer;">
-        Publicar Anonimamente
-    </button>
-
-    <hr style="margin:30px 0;">
-
-    <h2>📢 Mural Anônimo</h2>
-    <div id="feed"></div>
-</div>
-
+<!-- Firebase -->
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
@@ -69,9 +142,9 @@ window.publicar = async function(){
     }
 
     await addDoc(collection(db,"posts"),{
-        emocao: emocao,
-        conversar: conversar,
-        mensagem: mensagem,
+        emocao,
+        conversar,
+        mensagem,
         data: new Date().toLocaleString()
     });
 
@@ -97,9 +170,11 @@ async function carregarPosts(){
             </div>
         `;
     });
-
 }
 
 carregarPosts();
 
 </script>
+
+</body>
+</html>
