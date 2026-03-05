@@ -1,98 +1,138 @@
-<div style="max-width:600px;margin:auto;font-family:Arial;padding:20px;">
-    <h1 style="text-align:center;color:#4A6FA5;">🧠 Mente Livre</h1>
-    <p style="text-align:center;">Um espaço seguro para você se expressar anonimamente.</p>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mente Livre</title>
 
-    <h3>1️⃣ Como estou me sentindo hoje?</h3>
-    <select id="emocao" style="width:100%;padding:10px;margin-bottom:15px;">
-        <option value="🙂 Feliz">🙂 Feliz</option>
-        <option value="😔 Triste">😔 Triste</option>
-        <option value="😰 Ansioso">😰 Ansioso</option>
-        <option value="😡 Irritado">😡 Irritado</option>
-        <option value="😴 Cansado">😴 Cansado</option>
-    </select>
+<style>
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background: linear-gradient(-45deg,#4A6FA5,#6B8DD6,#8E54E9,#4776E6);
+    background-size:400% 400%;
+    animation: gradientBG 12s ease infinite;
+    overflow:hidden;
+    opacity:0;
+    transition:opacity 0.8s ease;
+}
 
-    <h3>2️⃣ Preciso conversar?</h3>
-    <select id="conversar" style="width:100%;padding:10px;margin-bottom:15px;">
-        <option value="Sim">Sim</option>
-        <option value="Não">Não</option>
-        <option value="Talvez">Talvez</option>
-    </select>
+body.fade-in{ opacity:1; }
+body.fade-out{ opacity:0; }
 
-    <h3>💬 Quer desabafar?</h3>
-    <textarea id="mensagem" placeholder="Escreva aqui..." style="width:100%;height:100px;padding:10px;"></textarea>
+@keyframes gradientBG{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
 
-    <button onclick="publicar()" style="width:100%;padding:12px;background:#4A6FA5;color:white;border:none;margin-top:15px;cursor:pointer;">
-        Publicar Anonimamente
-    </button>
+.container{
+    text-align:center;
+}
 
-    <hr style="margin:30px 0;">
+.baloes{
+    position:relative;
+    width:260px;
+    height:200px;
+    margin:auto;
+    cursor:pointer;
+}
 
-    <h2>📢 Mural Anônimo</h2>
-    <div id="feed"></div>
+.balao{
+    position:absolute;
+    width:170px;
+    animation: flutuar 4s ease-in-out infinite;
+    transition: transform 0.3s ease;
+}
+
+.balao:nth-child(1){
+    left:0;
+    top:20px;
+}
+
+.balao:nth-child(2){
+    right:0;
+    top:40px;
+    animation-delay:2s;
+}
+
+@keyframes flutuar{
+    0%{transform:translateY(0px);}
+    50%{transform:translateY(-15px);}
+    100%{transform:translateY(0px);}
+}
+
+.baloes:hover .balao{
+    transform: scale(1.1);
+}
+
+.baloes:active .balao{
+    transform: scale(0.95);
+}
+
+/* Pontinhos digitando */
+.dots{
+    position:absolute;
+    font-size:30px;
+    color:#4A6FA5;
+    letter-spacing:5px;
+    animation: blink 1.5s infinite;
+}
+
+.dot1{ left:55px; top:70px; }
+.dot2{ right:55px; top:85px; }
+
+@keyframes blink{
+    0%{opacity:0.2;}
+    50%{opacity:1;}
+    100%{opacity:0.2;}
+}
+
+h1{
+    color:white;
+    margin-top:30px;
+    font-size:28px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    
+    <div class="baloes" onclick="entrar()">
+        <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" class="balao">
+        <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" class="balao">
+        
+        <!-- Pontinhos -->
+        <div class="dots dot1">•••</div>
+        <div class="dots dot2">•••</div>
+    </div>
+
+    <h1>🧠 Mente Livre</h1>
+
 </div>
 
-<script type="module">
+<audio id="clickSound">
+  <source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" type="audio/mpeg">
+</audio>
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs } 
-from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+<script>
+document.addEventListener("DOMContentLoaded", ()=>{
+    document.body.classList.add("fade-in");
+});
 
-const firebaseConfig = {
-  apiKey: "AIzaSyB-OANZW93b36nOmfqKr8b1I-u-4eGhQIw",
-  authDomain: "mente-livre-site-f5f9f.firebaseapp.com",
-  projectId: "mente-livre-site-f5f9f",
-  storageBucket: "mente-livre-site-f5f9f.firebasestorage.app",
-  messagingSenderId: "227936699846",
-  appId: "1:227936699846:web:9cc2b251ffacb7c2e21ec7",
-  measurementId: "G-1S44TSKE2B"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-window.publicar = async function(){
-
-    let emocao = document.getElementById("emocao").value;
-    let conversar = document.getElementById("conversar").value;
-    let mensagem = document.getElementById("mensagem").value;
-
-    if(mensagem.trim() === ""){
-        alert("Por favor, escreva uma mensagem.");
-        return;
-    }
-
-    await addDoc(collection(db,"posts"),{
-        emocao: emocao,
-        conversar: conversar,
-        mensagem: mensagem,
-        data: new Date().toLocaleString()
-    });
-
-    document.getElementById("mensagem").value="";
-    carregarPosts();
+function entrar(){
+    document.getElementById("clickSound").play();
+    document.body.classList.add("fade-out");
+    setTimeout(()=>{
+        window.location.href = "index.html";
+    },800);
 }
-
-async function carregarPosts(){
-
-    let feed = document.getElementById("feed");
-    feed.innerHTML="";
-
-    const querySnapshot = await getDocs(collection(db,"posts"));
-
-    querySnapshot.forEach((doc)=>{
-        let post = doc.data();
-
-        feed.innerHTML += `
-            <div class="post">
-                <strong>${post.emocao}</strong> | Precisa conversar: ${post.conversar}
-                <p>${post.mensagem}</p>
-                <small>${post.data}</small>
-            </div>
-        `;
-    });
-
-}
-
-carregarPosts();
-
 </script>
+
+</body>
+</html>
