@@ -31,8 +31,27 @@
     <div id="feed"></div>
 </div>
 
-<script>
-function publicar(){
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs } 
+from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB-OANZW93b36nOmfqKr8b1I-u-4eGhQIw",
+  authDomain: "mente-livre-site-f5f9f.firebaseapp.com",
+  projectId: "mente-livre-site-f5f9f",
+  storageBucket: "mente-livre-site-f5f9f.firebasestorage.app",
+  messagingSenderId: "227936699846",
+  appId: "1:227936699846:web:9cc2b251ffacb7c2e21ec7",
+  measurementId: "G-1S44TSKE2B"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.publicar = async function(){
+
     let emocao = document.getElementById("emocao").value;
     let conversar = document.getElementById("conversar").value;
     let mensagem = document.getElementById("mensagem").value;
@@ -42,36 +61,38 @@ function publicar(){
         return;
     }
 
-    let post = {
+    await addDoc(collection(db,"posts"),{
         emocao: emocao,
         conversar: conversar,
         mensagem: mensagem,
         data: new Date().toLocaleString()
-    };
+    });
 
-    let posts = JSON.parse(localStorage.getItem("menteLivrePosts")) || [];
-    posts.unshift(post);
-    localStorage.setItem("menteLivrePosts", JSON.stringify(posts));
-
-    document.getElementById("mensagem").value = "";
+    document.getElementById("mensagem").value="";
     carregarPosts();
 }
 
-function carregarPosts(){
-    let feed = document.getElementById("feed");
-    let posts = JSON.parse(localStorage.getItem("menteLivrePosts")) || [];
+async function carregarPosts(){
 
-    feed.innerHTML = "";
-    posts.forEach(post => {
+    let feed = document.getElementById("feed");
+    feed.innerHTML="";
+
+    const querySnapshot = await getDocs(collection(db,"posts"));
+
+    querySnapshot.forEach((doc)=>{
+        let post = doc.data();
+
         feed.innerHTML += `
-            <div style="background:#f4f6fb;padding:15px;margin-bottom:15px;border-radius:10px;">
+            <div class="post">
                 <strong>${post.emocao}</strong> | Precisa conversar: ${post.conversar}
                 <p>${post.mensagem}</p>
                 <small>${post.data}</small>
             </div>
         `;
     });
+
 }
 
 carregarPosts();
+
 </script>
