@@ -1,3 +1,10 @@
+<script>
+window.addEventListener("pageshow", function (event) {
+    if (event.persisted || performance.getEntriesByType("navigation")[0].type === "reload") {
+        window.location.href = "index.html";
+    }
+});
+</script>
 <div style="max-width:600px;margin:auto;font-family:Arial;padding:20px;">
     <h1 style="text-align:center;color:#4A6FA5;">🧠 Mente Livre</h1>
     <p style="text-align:center;">Um espaço seguro para você se expressar anonimamente.</p>
