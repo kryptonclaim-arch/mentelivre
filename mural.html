@@ -165,16 +165,17 @@ from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCECp6Dg4cvcIkftLdOAcZ4mmge_usIQ2E",
-    authDomain: "mente-livre-site.firebaseapp.com",
-    projectId: "mente-livre-site",
-    storageBucket: "mente-livre-site.firebasestorage.app",
-    messagingSenderId: "735530905526",
-    appId: "1:735530905526:web:5bcc3825735eebf8fe5b17"
+  authDomain: "mente-livre-site.firebaseapp.com",
+  projectId: "mente-livre-site",
+  storageBucket: "mente-livre-site.firebasestorage.app",
+  messagingSenderId: "735530905526",
+  appId: "1:735530905526:web:5bcc3825735eebf8fe5b17"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// função para salvar post
 window.publicar = async function(){
 
     let emocao = document.getElementById("emocao").value;
@@ -182,7 +183,7 @@ window.publicar = async function(){
     let mensagem = document.getElementById("mensagem").value;
 
     if(mensagem.trim() === ""){
-        alert("Por favor, escreva uma mensagem.");
+        alert("Escreva uma mensagem");
         return;
     }
 
@@ -197,6 +198,7 @@ window.publicar = async function(){
     carregarPosts();
 }
 
+// função para carregar posts
 async function carregarPosts(){
 
     let feed = document.getElementById("feed");
@@ -208,11 +210,11 @@ async function carregarPosts(){
         let post = doc.data();
 
         feed.innerHTML += `
-            <div class="post">
-                <strong>${post.emocao}</strong> | Precisa conversar: ${post.conversar}
-                <p>${post.mensagem}</p>
-                <small>${post.data}</small>
-            </div>
+        <div class="post">
+            <strong>${post.emocao}</strong> | Precisa conversar: ${post.conversar}
+            <p>${post.mensagem}</p>
+            <small>${post.data}</small>
+        </div>
         `;
     });
 }
