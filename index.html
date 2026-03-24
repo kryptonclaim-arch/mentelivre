@@ -46,9 +46,11 @@ body.fade-out{ opacity:0; }
     position:absolute;
     width:170px;
     transition: transform 0.3s ease;
-    animation: flutuar 5s ease-in-out infinite, brilho 3s ease-in-out infinite alternate;
+    animation: flutuar 7s ease-in-out infinite, brilho 4s ease-in-out infinite alternate;
+    opacity:0.9;
 }
 
+/* Posição */
 .balao:nth-child(1){
     left:0;
     top:20px;
@@ -57,28 +59,31 @@ body.fade-out{ opacity:0; }
 .balao:nth-child(2){
     right:0;
     top:40px;
-    animation-delay:2s;
+    animation-delay:3s;
 }
 
+/* Movimento mais leve (efeito dormindo) */
 @keyframes flutuar{
-    0%{transform:translateY(0px);}
-    50%{transform:translateY(-18px);}
-    100%{transform:translateY(0px);}
+    0%{transform:translateY(0px) scale(1);}
+    50%{transform:translateY(-12px) scale(1.02);}
+    100%{transform:translateY(0px) scale(1);}
 }
 
+/* Brilho mais suave */
 @keyframes brilho{
-    from{ filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); }
-    to{ filter: drop-shadow(0 0 25px rgba(255,255,255,0.8)); }
+    from{ filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); }
+    to{ filter: drop-shadow(0 0 15px rgba(255,255,255,0.5)); }
 }
 
+/* Hover mais leve */
 .baloes:hover .balao{
-    transform: scale(1.08);
+    transform: scale(1.05);
 }
 
+/* Clique mais suave */
 .baloes:active .balao{
-    transform: scale(0.95);
+    transform: scale(0.97);
 }
-
 /* Pontinhos digitando */
 .dots{
     position:absolute;
